@@ -1,12 +1,20 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { darkTheme } from './theme';
 import { RecoilRoot } from 'recoil';
+import './FontAwesome';
+
+import Jua from './fonts/Jua-Regular.ttf';
+import CreateBoard from './Components/CreateBoard';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+@font-face {
+	font-family: 'Jua';
+	src: url(${Jua});
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -34,6 +42,9 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	font-family: 'Jua';
+  background-color: ${(props) => props.theme.bgColor};
+  color: black;
 }
 ol, ul {
 	list-style: none;
@@ -52,11 +63,7 @@ table {
 }
 *{
   box-sizing: border-box;
-}
-body{
-  font-family: 'Open Sans', sans-serif;
-  background-color: ${(props) => props.theme.bgColor};
-  color: black;
+  font-family: 'Jua';
 }
 a{
   text-decoration: none;
@@ -69,6 +76,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <RecoilRoot>
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
+      <CreateBoard />
       <App />
     </ThemeProvider>
   </RecoilRoot>,

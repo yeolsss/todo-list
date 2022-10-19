@@ -1,62 +1,128 @@
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from 'react-beautiful-dnd';
-import { useRecoilState } from 'recoil';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { todoState } from './atom';
-import DraggableCard from './Components/DraggableCard';
+import { createBoardBoolean, createBoardDefault, todoState } from './atom';
+import Board from './Components/Board';
+import { BsClipboardPlus } from 'react-icons/bs';
+import Trash from './Components/Trash';
+import { useEffect } from 'react';
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 480px;
-  width: 100%;
-  margin: 0 auto;
   justify-content: center;
   align-items: center;
+  width: 100vw;
   height: 100vh;
+  padding: 0px 30px;
 `;
 const Boards = styled.div`
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  width: 80%;
+  max-width: 1300px;
+  gap: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 `;
-const Board = styled.div`
-  padding: 20px 10px;
-  padding-top: 30px;
-  background-color: ${(props) => props.theme.boardColor};
-  border-radius: 5px;
-  min-height: 200px;
+
+const AddBoardBtn = styled.button`
+  all: unset;
+  position: fixed;
+  top: 100px;
+  right: 50px;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  @media all and (min-width: 1098px) and (max-width: 1634px) {
+    right: 20px;
+  }
+  @media all and (min-width: 768px) and (max-width: 1097px) {
+    right: 200px;
+  }
+  @media screen and (min-width: 480px) and (max-width: 767px) {
+    right: 5px;
+  }
+  > svg {
+    font-size: 60px;
+    color: ${(props) => props.theme.btnDefaultColor};
+    @media screen and (min-width: 480px) and (max-width: 767px) {
+      font-size: 30px;
+    }
+  }
 `;
 
 function App() {
-  const [toDos, setTodos] = useRecoilState(todoState);
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  const [isAddBoolean, setIsCreateBoolean] = useRecoilState(createBoardBoolean);
+
+  // 앱이 실행했을때 Board가 있으면 Board 생성 화면부터 보여준다.
+  useEffect(() => {
+    if (Object.keys(toDos).length <= 0) {
+      setIsCreateBoolean(!isAddBoolean);
+    }
+  }, []);
+
+  const onCreateBoard = () => setIsCreateBoolean(!isAddBoolean);
+  const [toDos, setToDos] = useRecoilState(todoState);
+  const onDragEnd = (info: DropResult) => {
+    const { destination, draggableId, source } = info;
     if (!destination) return;
-    setTodos((oldToDos) => {
-      const toDosCopy = [...oldToDos];
-      toDosCopy.splice(source.index, 1);
-      toDosCopy.splice(destination?.index, 0, draggableId);
-      return toDosCopy;
-    });
+    if (destination.droppableId === source.droppableId) {
+      // 같은 board에서 움직임
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
+    if (destination.droppableId !== source.droppableId) {
+      // 다른 board로 이동
+      if (destination.droppableId !== 'DelToDo') {
+        setToDos((allBoards) => {
+          const sourceBoardCopy = [...allBoards[source.droppableId]];
+          const taskObj = sourceBoardCopy[source.index];
+          const destinationBoardCopy = [...allBoards[destination.droppableId]];
+          //삭제
+          sourceBoardCopy.splice(source.index, 1);
+          //추가
+          destinationBoardCopy.splice(destination.index, 0, taskObj);
+          return {
+            ...allBoards,
+            [source.droppableId]: sourceBoardCopy,
+            [destination.droppableId]: destinationBoardCopy,
+          };
+        });
+      } else {
+        setToDos((allBoards) => {
+          const sourceBoardCopy = [...allBoards[source.droppableId]];
+          sourceBoardCopy.splice(source.index, 1);
+          return {
+            ...allBoards,
+            [source.droppableId]: sourceBoardCopy,
+          };
+        });
+      }
+    }
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
+        <AddBoardBtn onClick={onCreateBoard}>
+          <BsClipboardPlus />
+        </AddBoardBtn>
         <Boards>
-          <Droppable droppableId="one">
-            {(magic) => (
-              <Board ref={magic.innerRef} {...magic.droppableProps}>
-                {toDos.map((toDo, index) => (
-                  <DraggableCard key={toDo} index={index} toDo={toDo} />
-                ))}
-                {magic.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(toDos).map((boardId) => (
+            <Board toDos={toDos[boardId]} boardId={boardId} key={boardId} />
+          ))}
         </Boards>
+        <Trash />
       </Wrapper>
     </DragDropContext>
   );
