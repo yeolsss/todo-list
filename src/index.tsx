@@ -9,7 +9,7 @@ import Jua from './fonts/Jua-Regular.ttf';
 import CreateBoard from './Components/CreateBoard';
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap'); */
 
 @font-face {
 	font-family: 'Jua';

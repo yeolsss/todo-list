@@ -1,7 +1,7 @@
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { createBoardBoolean, createBoardDefault, todoState } from './atom';
+import { createBoardBoolean, todoState } from './atom';
 import Board from './Components/Board';
 import { BsClipboardPlus } from 'react-icons/bs';
 import Trash from './Components/Trash';
