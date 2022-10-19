@@ -7,12 +7,14 @@ interface ITrashProps {
   isDraggingFromThis: boolean;
   isDraggingOver: boolean;
 }
-const TrashWrapper = styled.div`
+const TrashWrapper = styled.div<ITrashProps>`
   width: 100px;
   height: 100px;
   position: fixed;
   bottom: 100px;
   right: 50px;
+  z-index: ${(props) =>
+    props.isDraggingOver ? '5001' : props.isDraggingFromThis ? '5001' : '0'};
   @media all and (min-width: 1098px) and (max-width: 1634px) {
     right: 20px;
   }
@@ -60,9 +62,12 @@ const TrashBoard = styled.div<ITrashProps>`
 
 function Trash() {
   return (
-    <TrashWrapper>
-      <Droppable droppableId="DelToDo">
-        {(magic, snapshot) => (
+    <Droppable droppableId="DelToDo">
+      {(magic, snapshot) => (
+        <TrashWrapper
+          isDraggingOver={snapshot.isDraggingOver}
+          isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
+        >
           <TrashBoard
             isDraggingOver={snapshot.isDraggingOver}
             isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
@@ -72,9 +77,9 @@ function Trash() {
             <IoTrashBinOutline />
             <IoTrashBinSharp />
           </TrashBoard>
-        )}
-      </Droppable>
-    </TrashWrapper>
+        </TrashWrapper>
+      )}
+    </Droppable>
   );
 }
 

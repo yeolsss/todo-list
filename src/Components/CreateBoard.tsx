@@ -11,7 +11,7 @@ const CreateBoardPopup = styled.div<{ isCreateBoolean: boolean }>`
   align-items: center;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1;
+  z-index: 2;
   transition: all 0.3s ease;
   height: ${(props) => (props.isCreateBoolean ? '100%' : '0%')};
   visibility: ${(props) => (props.isCreateBoolean ? 'visible' : 'hidden')};
