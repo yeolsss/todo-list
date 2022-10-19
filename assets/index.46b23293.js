@@ -974,6 +974,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   position: fixed;
   bottom: 100px;
   right: 50px;
+  z-index: ${e=>e.isDraggingOver||e.isDraggingFromThis?"5001":"0"};
   @media all and (min-width: 1098px) and (max-width: 1634px) {
     right: 20px;
   }
@@ -1006,7 +1007,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
     scale: 1.5;
     color: ${e=>e.theme.delColor};
   }
-`;function C$(){return ce(w$,{children:ce(hv,{droppableId:"DelToDo",children:(e,t)=>an(x$,{isDraggingOver:t.isDraggingOver,isDraggingFromThis:Boolean(t.draggingFromThisWith),ref:e.innerRef,...e.droppableProps,children:[ce(b$,{}),ce(S$,{})]})})})}const E$=fe.memo(C$),R$=ut.div`
+`;function C$(){return ce(hv,{droppableId:"DelToDo",children:(e,t)=>ce(w$,{isDraggingOver:t.isDraggingOver,isDraggingFromThis:Boolean(t.draggingFromThisWith),children:an(x$,{isDraggingOver:t.isDraggingOver,isDraggingFromThis:Boolean(t.draggingFromThisWith),ref:e.innerRef,...e.droppableProps,children:[ce(b$,{}),ce(S$,{})]})})})}const E$=fe.memo(C$),R$=ut.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1055,13 +1056,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   align-items: center;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1;
+  z-index: 2;
   transition: all 0.3s ease;
   height: ${e=>e.isCreateBoolean?"100%":"0%"};
   visibility: ${e=>e.isCreateBoolean?"visible":"hidden"};
 `,L$=ut.div`
   width: 500px;
   height: 250px;
+  border-radius: 15px;
   background-color: ${e=>e.theme.boardColor};
   display: flex;
   flex-direction: column;
