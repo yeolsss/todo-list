@@ -20,6 +20,7 @@ const CreateBoardPopup = styled.div<{ isCreateBoolean: boolean }>`
 const CreateBoardCard = styled.div<{ isCreateBoolean: boolean }>`
   width: 500px;
   height: 250px;
+  border-radius: 15px;
   background-color: ${(props) => props.theme.boardColor};
   display: flex;
   flex-direction: column;
