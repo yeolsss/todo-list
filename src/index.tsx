@@ -5,15 +5,13 @@ import { darkTheme } from './theme';
 import { RecoilRoot } from 'recoil';
 import './FontAwesome';
 
-import Jua from './fonts/Jua-Regular.ttf';
 import CreateBoard from './Components/CreateBoard';
 
 const GlobalStyle = createGlobalStyle`
 /* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap'); */
 
 @font-face {
-	font-family: 'Jua';
-	src: url(${Jua});
+	font-family: -apple-system;
 }
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -42,7 +40,6 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
-	font-family: 'Jua';
   background-color: ${(props) => props.theme.bgColor};
   color: black;
 }
@@ -63,7 +60,6 @@ table {
 }
 *{
   box-sizing: border-box;
-  font-family: 'Jua';
 }
 a{
   text-decoration: none;
